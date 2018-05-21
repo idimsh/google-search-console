@@ -22,6 +22,7 @@ class SearchResult {
 
   /**
    * convert a string to 'windows-1252' charset (compatable with PDF)
+   *
    * @param $string
    *
    * @return string
@@ -83,28 +84,35 @@ class SearchResult {
   /**
    * Get title of Search Result Item.
    *
+   * @param bool $to_windows To use iconv to windows-1252 encoding when strings
+   *                         appear strange in PDF
+   *
    * @return mixed
    */
-  public function getTitle($to_utf8 = FALSE) {
-    return $to_utf8 ? $this->iconv($this->search_result_item->getTitle()) : $this->search_result_item->getTitle();
+  public function getTitle($to_windows = FALSE) {
+    return $to_windows ? $this->iconv($this->search_result_item->getTitle()) : $this->search_result_item->getTitle();
   }
 
   /**
    * Get link of Search Result Item.
    *
+   ** @param bool $to_windows To use iconv to windows-1252 encoding when strings
+   *                         appear strange in PDF
    * @return mixed
    */
-  public function getLink($to_utf8 = FALSE) {
-    return $to_utf8 ? $this->iconv($this->search_result_item->getLink()) : $this->search_result_item->getLink();
+  public function getLink($to_windows = FALSE) {
+    return $to_windows ? $this->iconv($this->search_result_item->getLink()) : $this->search_result_item->getLink();
   }
 
   /**
    * Get snippet of Search Result Item.
    *
+   ** @param bool $to_windows To use iconv to windows-1252 encoding when strings
+   *                         appear strange in PDF
    * @return mixed
    */
-  public function getSnippet($to_utf8 = FALSE) {
-    return $to_utf8 ? $this->iconv($this->search_result_item->getSnippet()) : $this->search_result_item->getSnippet();
+  public function getSnippet($to_windows = FALSE) {
+    return $to_windows ? $this->iconv($this->search_result_item->getSnippet()) : $this->search_result_item->getSnippet();
   }
 
 }

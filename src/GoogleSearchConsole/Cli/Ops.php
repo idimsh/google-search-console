@@ -153,10 +153,10 @@ class Ops {
    * @return string
    */
   public static function filenameFromOperand() {
-    $ret                  = 'Search[';
+    $ret                   = 'Search[';
     $search_term_sanitized = preg_replace('@[^A-z0-9_.-]@', '-', self::getSearchTerm());
     $search_term_sanitized = preg_replace('@--+@', '-', $search_term_sanitized);
-    $ret                  .= $search_term_sanitized . ']-' . self::getLimit() . '.pdf';
+    $ret                   .= $search_term_sanitized . ']-' . self::getLimit() . '.pdf';
     return $ret;
   }
 

@@ -58,8 +58,7 @@ try {
   }
   $pdf->Output('F', $output);
   echo "saved in [$output]\n";
-}
-catch (\Exception $e) {
+} catch (\Exception $e) {
   CliOps::print_e("Failed to generate PDF file, got error:\n", $e->getMessage());
   exit(1);
 }

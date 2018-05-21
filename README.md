@@ -13,7 +13,7 @@ To do so, we have to have a Google account in order to setup a project there and
 ###1. Get Google API Key 
   While logged in to your Google Account, follow these steps:
   #####1. Navigate to [https://console.developers.google.com](https://console.developers.google.com) and create a new project
-  [Project select](assets/images/guide01.jpg)  
+  ![Project select](assets/images/guide01.jpg)  
   [Project add-new](assets/images/guide02.jpg)  
   [Project choose name and create](assets/images/guide03.jpg)
   

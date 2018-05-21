@@ -25,12 +25,14 @@ Basic Usage:
 ```
 php ./google-search.php <Phrase to search> <Number of Results>
 ```
-Both the <Phrase> and the <Number of results> are required.
+Both the \<Phrase> and the \<Number of results> are required.
+
+Use ```--help``` to print the available options.
+
 
 If you have troubles with SSL Certificates (on WAMP stack mostly), use the ```--no-verify``` command line option to skip SSL verification. 
 The error will be like ```cURL error 60: SSL certificate problem: unable to get local issuer certificate (see http://curl.haxx.se/libcurl/c/libcurl-errors.html)```
 
-Use ```--help``` to print the available options
 
 
 The result PDF file will be saved in the same directory as the script, and will have its name automatically generated from the search phrase, you can specify the file name including the directory name using ```--out``` command line option.

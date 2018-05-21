@@ -1,0 +1,2 @@
+Command:
+./google-search.php --cache --no-verify --thumb "best <script> in code:php" 20

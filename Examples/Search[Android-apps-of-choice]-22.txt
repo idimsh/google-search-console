@@ -1,0 +1,2 @@
+Command:
+ ./google-search.php --cache --no-verify "Android apps of choice" 22

@@ -6,9 +6,37 @@ To do so, we have to have a Google account in order to setup a project there and
 
 ## Prerequisites
 
-### At PHP level: 
+#### At PHP level: 
 * readline library
 * PHP version >= 5.6
+
+## Usage
+Clone the repo and install the required packages using composer.
+In project directory execute:
+```
+composer install
+```
+
+Then update the ```keys.json``` file in project directory to add your "API Key" and "Search Engine ID" generated above.
+
+Alternatively, you can use ```--key``` and ```--id``` command line options to provide those.
+
+Basic Usage:
+```
+php ./google-search.php <Phrase to search> <Number of Results>
+```
+Both the <Phrase> and the <Number of results> are required.
+
+If you have troubles with SSL Certificates (on WAMP stack mostly), use the ```--no-verify``` command line option to skip SSL verification. 
+The error will be like ```cURL error 60: SSL certificate problem: unable to get local issuer certificate (see http://curl.haxx.se/libcurl/c/libcurl-errors.html)```
+
+Use ```--help``` to print the available options
+
+
+The result PDF file will be saved in the same directory as the script, and will have its name automatically generated from the search phrase, you can specify the file name including the directory name using ```--out``` command line option.
+
+
+## Getting the Keys
 
 ### 1. Get Google API Key 
   While logged in to your Google Account, follow these steps:
@@ -91,24 +119,3 @@ To do so, we have to have a Google account in order to setup a project there and
  
 
   
-## Usage
-Clone the repo and install the required packages using composer.
-In project directory execute:
-```
-composer install
-```
-
-Then update the ```keys.json``` file in project directory to add your "API Key" and "Search Engine ID" generated above.
-
-Basic Usage:
-```
-php ./google-search.php <Phrase to search> <Number of Results>
-```
-Both the <Phrase> and the <Number of results> are required.
-
-If you have troubles with SSL Certificates (on WAMP stack mostly), use the ```--no-verify``` command line option to skip SSL verification.
-
-Use ```--help``` to print the available options
-
-
-

@@ -31,6 +31,10 @@ $results = \GoogleSearchConsole\Google\Search::factory()
 
 if ($results instanceof \Exception) {
   CliOps::print_e("Failed to perform search with error:\n[" . $results->getMessage() . "]");
+  if (stripos($results->getMessage(), 'SSL') !== FALSE) {
+    CliOps::print_e("\ntry with --no-verify command line option if you have errors with SSL\n");
+  }
+
   exit(1);
 }
 
@@ -53,6 +57,7 @@ try {
     @mkdir(dirname($output), 0755, TRUE);
   }
   $pdf->Output('F', $output);
+  echo "saved in [$output]\n";
 }
 catch (\Exception $e) {
   CliOps::print_e("Failed to generate PDF file, got error:\n", $e->getMessage());

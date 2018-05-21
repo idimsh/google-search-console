@@ -3,7 +3,6 @@
     "setasign/fpdf": "1.8.1",
     "google/apiclient": "^2.0",
     "google/apiclient-services": "dev-master",
-    "orvice/google-custom-search-api": "dev-master",
     "ulrichsg/getopt-php": "^3.0"
   },
 

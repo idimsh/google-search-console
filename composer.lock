@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "44eef966e25a141b8ef549466a275e0b",
+    "content-hash": "c413c281da3588b1b02d6d50fb9f2d65",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -453,41 +453,6 @@
             "time": "2017-06-19T01:22:40+00:00"
         },
         {
-            "name": "orvice/google-custom-search-api",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/orvice/google-apis-php-clients.git",
-                "reference": "b1339d4e7180a7c715587b12305c1f2ee9425736"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/orvice/google-apis-php-clients/zipball/b1339d4e7180a7c715587b12305c1f2ee9425736",
-                "reference": "b1339d4e7180a7c715587b12305c1f2ee9425736",
-                "shasum": ""
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~5.0"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [],
-                "files": [],
-                "psr-0": {
-                    "Google\\Api\\": "src/Google/Api"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "authors": [
-                {
-                    "name": "Xiaobin",
-                    "email": "xb@orx.me"
-                }
-            ],
-            "description": "Google Custom Search api",
-            "time": "2016-04-15T14:47:31+00:00"
-        },
-        {
             "name": "phpseclib/phpseclib",
             "version": "2.0.11",
             "source": {
@@ -811,8 +776,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "google/apiclient-services": 20,
-        "orvice/google-custom-search-api": 20
+        "google/apiclient-services": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

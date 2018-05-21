@@ -28,7 +28,7 @@ class SearchResult {
    * @return string
    */
   protected function iconv($string) {
-    return iconv('UTF-8', 'windows-1252', stripslashes($string));
+    return @iconv('UTF-8', 'windows-1252', stripslashes($string));
   }
 
   public function __construct(\Google_Service_Customsearch_Result $search_result_item) {

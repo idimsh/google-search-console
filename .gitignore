@@ -42,4 +42,4 @@ vendor/
 resources/
 *.pdf
 my.keys.json
-
+.cache

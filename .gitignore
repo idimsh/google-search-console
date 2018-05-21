@@ -40,6 +40,6 @@ fabric.properties
 ####
 vendor/
 resources/
-*.pdf
+/*.pdf
 my.keys.json
 .cache

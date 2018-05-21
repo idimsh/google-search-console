@@ -44,14 +44,23 @@ class Ops {
         Option::create('h', 'help', GetOpt::NO_ARGUMENT)
           ->setDescription('Show this help text'),
 
+        Option::create('k', 'key', GetOpt::REQUIRED_ARGUMENT)
+          ->setDescription('Pass the Google API key (Developer key) here instead of reading it from configuration file [keys.json].'),
+
+        Option::create('i', 'id', GetOpt::REQUIRED_ARGUMENT)
+          ->setDescription('Pass the Google Search Engine ID here instead of reading it from configuration file [keys.json].'),
+
+        Option::create('o', 'out', GetOpt::REQUIRED_ARGUMENT)
+          ->setDescription('Specify the output PDF file name, the default name is taken from <Search term> and <Result limit>.'),
+
         Option::create(NULL, 'no-verify', GetOpt::NO_ARGUMENT)
           ->setDescription('Skip SSL certificate verification against Google services, this is required on some WAMP stacks, if the search has failed.'),
 
         Option::create(NULL, 'thumb', GetOpt::NO_ARGUMENT)
           ->setDescription('Download thumbnails of search results (from metadata) and print them in PDF.'),
 
-        Option::create('o', 'out', GetOpt::REQUIRED_ARGUMENT)
-          ->setDescription('Specify the output PDF file name, the default name is taken from <Search term> and <Result limit>.'),
+        Option::create(NULL, 'cache', GetOpt::NO_ARGUMENT)
+          ->setDescription('Request to cache search results and retrieve from cache if available, used for development to reduce the API calls.'),
       ]);
 
       static::$getopt->addOperands([
@@ -94,19 +103,19 @@ class Ops {
       echo self::getGetops()->getHelpText();
       exit(0);
     }
-    $search_term = self::getGetops()->getOperand('search_term');
-    $limit       = self::getGetops()->getOperand('limit');
+    $search_term = trim(self::getGetops()->getOperand('search_term'));
+    $limit       = trim(self::getGetops()->getOperand('limit'));
 
     if (empty($search_term)) {
-      self::print_e("<Search term> is required");
+      self::print_e("<search_term> is required");
       exit(1);
     }
     if (empty($limit)) {
-      self::print_e("<Result limit> is required");
+      self::print_e("<limit> is required");
       exit(1);
     }
     if (!is_numeric($limit) || $limit < 1) {
-      self::print_e("<Result limit> must be a positive integer, [$limit] is not a valid value.");
+      self::print_e("<limit> must be a positive integer, [$limit] is not a valid value.");
       exit(1);
     }
   }
@@ -121,11 +130,21 @@ class Ops {
   }
 
   /**
-   * Is thumbnail requested
+   * Is thumbnail requested.
+   *
    * @return bool
    */
   public static function isThumbnail() {
     return !empty(self::cmdOptionsGet()['thumb']);
+  }
+
+  /**
+   * Is Caching requested.
+   *
+   * @return bool
+   */
+  public static function isCache() {
+    return !empty(self::cmdOptionsGet()['cache']);
   }
 
   /**
@@ -135,9 +154,9 @@ class Ops {
    */
   public static function filenameFromOperand() {
     $ret                  = 'Search[';
-    $search_term_santized = preg_replace('@[^A-z0-9_.-]@', '-', self::getSearchTerm());
-    $search_term_santized = preg_replace('@--+@', '-', $search_term_santized);
-    $ret                  .= $search_term_santized . ']-' . self::getLimit() . '.pdf';
+    $search_term_sanitized = preg_replace('@[^A-z0-9_.-]@', '-', self::getSearchTerm());
+    $search_term_sanitized = preg_replace('@--+@', '-', $search_term_sanitized);
+    $ret                  .= $search_term_sanitized . ']-' . self::getLimit() . '.pdf';
     return $ret;
   }
 
@@ -158,7 +177,7 @@ class Ops {
    * @return mixed
    */
   public static function getSearchTerm() {
-    return self::getGetops()->getOperand('search_term');
+    return trim(self::getGetops()->getOperand('search_term'));
   }
 
   /**
@@ -167,7 +186,7 @@ class Ops {
    * @return mixed
    */
   public static function getLimit() {
-    return self::getGetops()->getOperand('limit');
+    return trim(self::getGetops()->getOperand('limit'));
   }
 
   /**
@@ -192,6 +211,9 @@ class Ops {
    * @return string
    */
   public static function getApiKey() {
+    if (!empty(self::cmdOptionsGet()['key'])) {
+      return self::cmdOptionsGet()['key'];
+    }
     $keys = self::parseKeysFile();
     return !empty($keys->api_key) && $keys->api_key !== self::DEFAULT_API_KEY ? $keys->api_key : '';
   }
@@ -202,33 +224,12 @@ class Ops {
    * @return string
    */
   public static function getSearchEngineId() {
+    if (!empty(self::cmdOptionsGet()['id'])) {
+      return self::cmdOptionsGet()['id'];
+    }
     $keys = self::parseKeysFile();
     return !empty($keys->search_engine_id) && $keys->search_engine_id !== self::DEFAULT_SE_ID ? $keys->search_engine_id : '';
   }
 
-
-  /**
-   * Get an answer from user to a question printed before.
-   * Example:
-   *   echo "\nConfirm Rename? [y/N]? \n";
-   *   $line = getAnswer();
-   *   if ($line !== 'y') {
-   *     echo "exitting ... \n";
-   *     exit(0);
-   *   }
-   *
-   *
-   * @return string
-   */
-  public static function getAnswer() {
-    if (PHP_OS == 'WINNT') {
-      $line = stream_get_line(STDIN, 1024, PHP_EOL);
-    }
-    else {
-      $line = readline('');
-    }
-
-    return $line;
-  }
 
 }

@@ -10,12 +10,20 @@
  *   php google-search.php --help
  */
 
+if (!file_exists(__DIR__ . '/vendor/autoload.php')) {
+  die("[vendor/autoload.php] file not found, init the project with 'composer install' command first\n");
+}
+
+if (!function_exists('readline')) {
+  die("[readline] library (extension) not enabled in this PHP, install the extension first\n");
+}
 
 require_once __DIR__ . '/vendor/autoload.php';
 const KEYS_FILES = __DIR__ . DIRECTORY_SEPARATOR . 'keys.json';
 
 use \GoogleSearchConsole\Cli\Ops as CliOps;
 
+// this will ensure all parameters are correct, else it will exit.
 CliOps::cmdOptionsParse();
 
 $results = \GoogleSearchConsole\Google\Search::factory()
@@ -36,12 +44,19 @@ if (file_exists($output)) {
   }
 }
 
-$pdf = new \GoogleSearchConsole\Pdf\Generator();
-$pdf->AliasNbPages();
-$pdf->AddPage();
-$pdf->writeResults($results);
-/*$i = 1;
-while(($file_name = "my-pdf-{$i}.pdf") && file_exists($file_name) && $i++);*/
-$pdf->Output('F', $output);
+try {
+  $pdf = new \GoogleSearchConsole\Pdf\Generator();
+  $pdf->AliasNbPages();
+  $pdf->AddPage();
+  $pdf->writeResults($results);
+  if (!file_exists(dirname($output))) {
+    @mkdir(dirname($output), 0755, TRUE);
+  }
+  $pdf->Output('F', $output);
+}
+catch (\Exception $e) {
+  CliOps::print_e("Failed to generate PDF file, got error:\n", $e->getMessage());
+  exit(1);
+}
 
 exit (0);

@@ -52,7 +52,11 @@ class Search {
      * greater than 10, to get more results, we use the 'start' parameter to
      * shift the offset of the results and get 10 at each call.
      */
-    $number_of_searches   = $number_of_results > 10 ? ceil($number_of_results / 10) : 1;
+    if (CliOps::isCache() && ($cache = $this->cacheGet($search_term, $number_of_results))) {
+      return $cache;
+    }
+
+    $number_of_searches   = ceil($number_of_results / 10);
     $final_items          = new Results();
     $all_items            = [];
     $current_search_count = 0;
@@ -68,8 +72,8 @@ class Search {
         $response = $search->cse->listCse($search_term, [
           'cx'    => CliOps::getSearchEngineId(),
           'start' => 1 + $current_search_count * 10,
-//          'gl'    => 'de',
-//          'hl'    => 'de',
+          //          'gl'    => 'de',
+          //          'hl'    => 'de',
         ]);
         $items    = $response->getItems();
         if (!count($items)) {
@@ -88,6 +92,72 @@ class Search {
       return $e;
     }
     $final_items->setItems($all_items);
+    if (CliOps::isCache()) {
+      if (!$this->cacheSave($final_items, $search_term, $number_of_results)) {
+        CliOps::print_e("Failed to save in cache!");
+      }
+    }
+
     return $final_items;
+  }
+
+  /**
+   * Get the complate path to cache file.
+   *
+   * @param $search_term
+   * @param $number_of_results
+   *
+   * @return string
+   */
+  protected function cacheFilename($search_term, $number_of_results) {
+    $cache_file =
+      dirname($_SERVER['argv'][0]) . DIRECTORY_SEPARATOR .
+      '.cache/' .
+      date('Y-m') . DIRECTORY_SEPARATOR . date('d') . DIRECTORY_SEPARATOR .
+      CliOps::filenameFromOperand() . '--' . sha1($search_term . $number_of_results);
+
+    return PHP_OS == 'WINNT' ? str_replace('/', DIRECTORY_SEPARATOR, $cache_file) : $cache_file;
+  }
+
+  /**
+   * Save results in cache file.
+   *
+   * @param $results
+   * @param $search_term
+   * @param $number_of_results
+   *
+   * @return bool|int
+   */
+  protected function cacheSave($results, $search_term, $number_of_results) {
+    $cache_file = $this->cacheFilename($search_term, $number_of_results);
+    $dir        = dirname($cache_file);
+
+    if (!file_exists($dir)) {
+      if (!@mkdir($dir, 0755, TRUE)) {
+        return FALSE;
+      }
+    }
+
+    return @file_put_contents($cache_file, serialize($results));
+  }
+
+  /**
+   * @param $search_term
+   * @param $number_of_results
+   *
+   * @return NULL|Results
+   */
+  protected function cacheGet($search_term, $number_of_results) {
+    $cache_file = $this->cacheFilename($search_term, $number_of_results);
+    if (!file_exists($cache_file)) {
+      return NULL;
+    }
+
+    $content = @file_get_contents($cache_file);
+    if (!$content || !($content = @unserialize($content))) {
+      return NULL;
+    }
+
+    return $content;
   }
 }

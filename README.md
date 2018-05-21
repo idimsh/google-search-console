@@ -17,6 +17,7 @@ To do so, we have to have a Google account in order to setup a project there and
   
   
   Select project:
+  
   ![Project select](assets/images/guide01.jpg "Project select")  
   
   

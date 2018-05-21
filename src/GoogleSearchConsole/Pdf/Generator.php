@@ -80,7 +80,7 @@ class Generator extends \FPDF {
     // Arial italic 8
     $this->SetFont('Arial', 'I', 8);
     // Page number
-    $this->Cell(0, 10, 'Page ' . $this->PageNo() . '/{nb}', 0, 0, 'C');
+    $this->Cell(0, 10, 'Page ' . $this->PageNo() . ' of {nb}', 0, 0, 'C');
   }
 
   protected function writeThumbnailForItem(\GoogleSearchConsole\Google\SearchResult $item, $at_y = NULL) {
